@@ -66,16 +66,15 @@ class NotificationService {
   }) async {
     if (!_initialized) await initialize();
 
-    final String statusIcon = isRunning ? '▶' : '⏸';
     final String statusText = isRunning ? 'Running' : 'Paused';
     
     // Build rich notification content
     final inboxLines = <String>[];
-    inboxLines.add('⏱️ Elapsed: $elapsedTime');
+    inboxLines.add('Elapsed: $elapsedTime');
     if (remainingTime != null) {
-      inboxLines.add('⏳ Remaining: $remainingTime');
+      inboxLines.add('Remaining: $remainingTime');
     }
-    inboxLines.add('🚴 Status: $statusText');
+    inboxLines.add('Status: $statusText');
 
     final androidDetails = AndroidNotificationDetails(
       _channelId,
@@ -90,7 +89,7 @@ class NotificationService {
       enableVibration: false,
       styleInformation: InboxStyleInformation(
         inboxLines,
-        contentTitle: '$statusIcon $planName',
+        contentTitle: planName,
         summaryText: 'RidePulse Timer',
       ),
       icon: '@mipmap/launcher_icon',
@@ -99,6 +98,7 @@ class NotificationService {
       colorized: true,
       category: AndroidNotificationCategory.workout,
       visibility: NotificationVisibility.public,
+      subText: statusText,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -115,8 +115,8 @@ class NotificationService {
 
     await _notifications.show(
       _notificationId,
-      '$statusIcon $planName',
-      '⏱️ $elapsedTime${remainingTime != null ? ' | ⏳ $remainingTime' : ''}',
+      planName,
+      '$elapsedTime${remainingTime != null ? ' | $remainingTime' : ''} • $statusText',
       notificationDetails,
     );
   }
