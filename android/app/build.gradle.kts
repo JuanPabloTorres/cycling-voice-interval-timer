@@ -36,7 +36,7 @@ android {
         applicationId = "com.ridepulse.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 4
+        versionCode = 5
         versionName = "1.1.1"
     }
 
