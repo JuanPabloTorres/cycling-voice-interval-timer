@@ -66,11 +66,16 @@ class NotificationService {
   }) async {
     if (!_initialized) await initialize();
 
-    final String contentText = remainingTime != null
-        ? 'Elapsed: $elapsedTime | Remaining: $remainingTime'
-        : 'Elapsed: $elapsedTime';
-
-    final String statusIcon = isRunning ? '▶️' : '⏸️';
+    final String statusIcon = isRunning ? '▶' : '⏸';
+    final String statusText = isRunning ? 'Running' : 'Paused';
+    
+    // Build rich notification content
+    final inboxLines = <String>[];
+    inboxLines.add('⏱️ Elapsed: $elapsedTime');
+    if (remainingTime != null) {
+      inboxLines.add('⏳ Remaining: $remainingTime');
+    }
+    inboxLines.add('🚴 Status: $statusText');
 
     final androidDetails = AndroidNotificationDetails(
       _channelId,
@@ -83,16 +88,24 @@ class NotificationService {
       showWhen: false,
       playSound: false,
       enableVibration: false,
-      styleInformation: BigTextStyleInformation(contentText),
+      styleInformation: InboxStyleInformation(
+        inboxLines,
+        contentTitle: '$statusIcon $planName',
+        summaryText: 'RidePulse Timer',
+      ),
       icon: '@mipmap/launcher_icon',
+      largeIcon: const DrawableResourceAndroidBitmap('@mipmap/launcher_icon'),
       color: const Color(0xFF00D9FF),
       colorized: true,
+      category: AndroidNotificationCategory.workout,
+      visibility: NotificationVisibility.public,
     );
 
     const iosDetails = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: false,
+      categoryIdentifier: 'timer',
     );
 
     final notificationDetails = NotificationDetails(
@@ -103,7 +116,7 @@ class NotificationService {
     await _notifications.show(
       _notificationId,
       '$statusIcon $planName',
-      contentText,
+      '⏱️ $elapsedTime${remainingTime != null ? ' | ⏳ $remainingTime' : ''}',
       notificationDetails,
     );
   }
