@@ -11,6 +11,7 @@ import '../services/services.dart';
 class TimerProvider extends ChangeNotifier {
   final StorageService _storageService;
   final TtsService _ttsService;
+  final NotificationService _notificationService;
   late final TimerEngineService _timerEngine;
 
   // Plans state
@@ -27,10 +28,13 @@ class TimerProvider extends ChangeNotifier {
   TimerProvider({
     StorageService? storageService,
     TtsService? ttsService,
+    NotificationService? notificationService,
   })  : _storageService = storageService ?? StorageService(),
-        _ttsService = ttsService ?? TtsService() {
+        _ttsService = ttsService ?? TtsService(),
+        _notificationService = notificationService ?? NotificationService() {
     _timerEngine = TimerEngineService(ttsService: _ttsService);
     _setupTimerCallbacks();
+    _notificationService.initialize();
   }
 
   // ============================================================
@@ -196,6 +200,7 @@ class TimerProvider extends ChangeNotifier {
   void stopTimer() {
     _timerEngine.stop();
     _recentMessages.clear();
+    _notificationService.cancelTimerNotification();
     notifyListeners();
   }
 
@@ -239,10 +244,12 @@ class TimerProvider extends ChangeNotifier {
 
   void _setupTimerCallbacks() {
     _timerEngine.onTick = (elapsed) {
+      _updateNotification();
       notifyListeners();
     };
 
     _timerEngine.onStateChanged = (state) {
+      _updateNotification();
       notifyListeners();
     };
 
@@ -262,8 +269,21 @@ class TimerProvider extends ChangeNotifier {
     };
 
     _timerEngine.onCompleted = () {
+      _notificationService.cancelTimerNotification();
       notifyListeners();
     };
+  }
+
+  void _updateNotification() {
+    if (_currentPlan != null && 
+        (_timerState == TimerState.running || _timerState == TimerState.paused)) {
+      _notificationService.showTimerNotification(
+        planName: _currentPlan!.name,
+        elapsedTime: formattedElapsedTime,
+        remainingTime: formattedRemainingTime,
+        isRunning: _timerState == TimerState.running,
+      );
+    }
   }
 
   void _setLoading(bool loading) {
@@ -276,6 +296,7 @@ class TimerProvider extends ChangeNotifier {
     _timerEngine.dispose();
     _ttsService.dispose();
     _storageService.close();
+    _notificationService.cancelAll();
     super.dispose();
   }
 }
