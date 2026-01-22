@@ -743,7 +743,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
     );
   }
 
-  void _savePlan() {
+  void _savePlan() async {
     if (!_formKey.currentState!.validate()) return;
 
     final provider = context.read<TimerProvider>();
@@ -767,18 +767,20 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
     );
 
     if (isEditing) {
-      provider.updatePlan(plan);
+      await provider.updatePlan(plan);
     } else {
-      provider.createPlan(plan);
+      await provider.createPlan(plan);
     }
 
-    Navigator.pop(context);
+    if (!mounted) return;
     
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(isEditing ? 'Plan updated' : 'Plan created'),
-        backgroundColor: AppColors.success,
-      ),
+    // Show success animation
+    await showSuccessAnimation(
+      context,
+      message: isEditing ? 'Plan updated!' : 'Plan created!',
     );
+    
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 }

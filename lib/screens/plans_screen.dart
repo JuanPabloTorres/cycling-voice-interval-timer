@@ -366,9 +366,17 @@ class _PlansScreenState extends State<PlansScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              provider.deletePlan(plan.id);
+              await provider.deletePlan(plan.id);
+              
+              if (!context.mounted) return;
+              
+              // Show success animation
+              await showSuccessAnimation(
+                context,
+                message: 'Plan deleted!',
+              );
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: const Text('Delete'),
