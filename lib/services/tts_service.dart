@@ -19,7 +19,7 @@ class TtsVoice {
 
 /// Service for Text-to-Speech functionality.
 /// 
-/// Provides voice announcements in English for timer events.
+/// Provides voice announcements in Spanish for timer events.
 /// Designed for reliable foreground operation with serialized speech.
 class TtsService {
   FlutterTts? _flutterTts;
@@ -35,7 +35,7 @@ class TtsService {
   double _speechRate = 0.45;  // Slower for better clarity
   double _pitch = 1.0;
 
-  /// Available English voices on this device.
+  /// Available Spanish voices on this device.
   List<TtsVoice> get availableVoices => List.unmodifiable(_availableVoices);
   
   /// Currently selected voice.
@@ -60,8 +60,8 @@ class TtsService {
       // Load available Spanish voices
       await _loadAvailableVoices();
       
-      // Set language to English
-      await _flutterTts!.setLanguage('en-US');
+      // Set language to Spanish
+      await _flutterTts!.setLanguage('es-ES');
       
       // If we have a preferred voice, use it
       if (_selectedVoice != null) {
@@ -109,7 +109,7 @@ class TtsService {
       });
       
       _isInitialized = true;
-      print('[TtsService] Initialized with ${_availableVoices.length} English voices');
+      print('[TtsService] Initialized with ${_availableVoices.length} Spanish voices');
     } catch (e) {
       print('[TtsService] Initialization error: $e');
       _isInitialized = true;
@@ -125,7 +125,7 @@ class TtsService {
         _availableVoices = (voices as List)
             .where((voice) {
               final locale = voice['locale']?.toString().toLowerCase() ?? '';
-              return locale.startsWith('en');
+              return locale.startsWith('es');
             })
             .map((voice) {
               final name = voice['name']?.toString() ?? 'Unknown';
@@ -159,7 +159,7 @@ class TtsService {
         // Sort by display name
         _availableVoices.sort((a, b) => a.displayName.compareTo(b.displayName));
         
-        print('[TtsService] Found ${_availableVoices.length} English voices');
+        print('[TtsService] Found ${_availableVoices.length} Spanish voices');
       }
     } catch (e) {
       print('[TtsService] Error loading voices: $e');
