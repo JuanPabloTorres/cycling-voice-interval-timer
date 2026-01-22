@@ -371,6 +371,114 @@ class _PlansScreenState extends State<PlansScreen> {
       ),
     );
   }
+
+  Widget _buildActiveTimerBanner(BuildContext context, TimerProvider provider) {
+    final isRunning = provider.timerState == TimerState.running;
+    final isPaused = provider.timerState == TimerState.paused;
+    
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RunTimerScreen(plan: provider.currentPlan!),
+        ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(AppDimens.md),
+        padding: const EdgeInsets.all(AppDimens.lg),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isRunning 
+                ? [AppColors.play, AppColors.play.withValues(alpha: 0.7)]
+                : [AppColors.pause, AppColors.pause.withValues(alpha: 0.7)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+          boxShadow: [
+            BoxShadow(
+              color: (isRunning ? AppColors.play : AppColors.pause).withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  isRunning ? Icons.play_circle_filled : Icons.pause_circle_filled,
+                  color: Colors.white,
+                  size: 32,
+                ),
+                const SizedBox(width: AppDimens.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Timer ${isRunning ? 'Running' : 'Paused'}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        provider.currentPlan!.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.stop_circle, color: Colors.white, size: 32),
+                  onPressed: () {
+                    provider.stopTimer();
+                  },
+                  tooltip: 'Stop Timer',
+                ),
+              ],
+            ),
+            const SizedBox(height: AppDimens.md),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  provider.formattedElapsedTime,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+                if (provider.formattedRemainingTime != null)
+                  Text(
+                    provider.formattedRemainingTime!,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// Grid card widget for displaying a single plan in grid layout.
@@ -802,114 +910,6 @@ class _PlanCardState extends State<_PlanCard>
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActiveTimerBanner(BuildContext context, TimerProvider provider) {
-    final isRunning = provider.timerState == TimerState.running;
-    final isPaused = provider.timerState == TimerState.paused;
-    
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RunTimerScreen(plan: provider.currentPlan!),
-        ),
-      ),
-      child: Container(
-        margin: const EdgeInsets.all(AppDimens.md),
-        padding: const EdgeInsets.all(AppDimens.lg),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isRunning 
-                ? [AppColors.play, AppColors.play.withValues(alpha: 0.7)]
-                : [AppColors.pause, AppColors.pause.withValues(alpha: 0.7)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(AppDimens.radiusLg),
-          boxShadow: [
-            BoxShadow(
-              color: (isRunning ? AppColors.play : AppColors.pause).withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  isRunning ? Icons.play_circle_filled : Icons.pause_circle_filled,
-                  color: Colors.white,
-                  size: 32,
-                ),
-                const SizedBox(width: AppDimens.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Timer ${isRunning ? 'Running' : 'Paused'}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        provider.currentPlan!.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.stop_circle, color: Colors.white, size: 32),
-                  onPressed: () {
-                    provider.stopTimer();
-                  },
-                  tooltip: 'Stop Timer',
-                ),
-              ],
-            ),
-            const SizedBox(height: AppDimens.md),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  provider.formattedElapsedTime,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'monospace',
-                  ),
-                ),
-                if (provider.formattedRemainingTime != null)
-                  Text(
-                    provider.formattedRemainingTime!,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-              ],
-            ),
-          ],
         ),
       ),
     );
