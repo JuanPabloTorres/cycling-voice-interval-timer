@@ -80,8 +80,16 @@ class _PlansScreenState extends State<PlansScreen> {
   }
 
   Widget _buildAppBar(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 400;
+    
     return Container(
-      padding: const EdgeInsets.fromLTRB(AppDimens.lg, AppDimens.md, AppDimens.md, AppDimens.md),
+      padding: EdgeInsets.fromLTRB(
+        isSmallScreen ? AppDimens.md : AppDimens.lg,
+        AppDimens.sm,
+        AppDimens.sm,
+        AppDimens.sm,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -95,56 +103,66 @@ class _PlansScreenState extends State<PlansScreen> {
       child: Row(
         children: [
           // Logo/Title with app icon
-          Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(14),
-                  child: Image.asset(
-                    'assets/icon/ridepulse3.png',
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.high,
-                    cacheWidth: 144, // 48 * 3 for high DPI
-                    cacheHeight: 144,
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: isSmallScreen ? 40 : 48,
+                  height: isSmallScreen ? 40 : 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 14),
                   ),
-                ),
-              ),
-              const SizedBox(width: AppDimens.md),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'RidePulse',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimaryLight,
-                      letterSpacing: -0.5,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 14),
+                    child: Image.asset(
+                      'assets/icon/ridepulse3.png',
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.high,
+                      cacheWidth: 144,
+                      cacheHeight: 144,
                     ),
                   ),
-                  Text(
-                    'Interval Training',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondaryLight,
-                      letterSpacing: 0.5,
-                    ),
+                ),
+                SizedBox(width: isSmallScreen ? AppDimens.sm : AppDimens.md),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'RidePulse',
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 20 : 24,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimaryLight,
+                          letterSpacing: -0.5,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (!isSmallScreen)
+                        Text(
+                          'Interval Training',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textSecondaryLight,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          const Spacer(),
+          const SizedBox(width: AppDimens.sm),
           // Action buttons with styled containers
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimens.sm, vertical: AppDimens.xs),
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmallScreen ? 2 : AppDimens.xs,
+              vertical: AppDimens.xs,
+            ),
             decoration: BoxDecoration(
               color: AppColors.secondary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppDimens.radiusMd),
@@ -153,11 +171,15 @@ class _PlansScreenState extends State<PlansScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.volume_up_rounded, size: 22),
+                  icon: Icon(Icons.volume_up_rounded, size: isSmallScreen ? 20 : 22),
                   color: AppColors.secondary,
                   onPressed: () => context.read<TimerProvider>().testVoice(),
                   tooltip: 'Test voice',
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  padding: EdgeInsets.all(isSmallScreen ? 8 : 10),
+                  constraints: BoxConstraints(
+                    minWidth: isSmallScreen ? 36 : 40,
+                    minHeight: isSmallScreen ? 36 : 40,
+                  ),
                 ),
                 Container(
                   height: 24,
@@ -165,14 +187,18 @@ class _PlansScreenState extends State<PlansScreen> {
                   color: AppColors.secondary.withValues(alpha: 0.3),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.settings_voice_rounded, size: 22),
+                  icon: Icon(Icons.settings_voice_rounded, size: isSmallScreen ? 20 : 22),
                   color: AppColors.secondary,
                   onPressed: () => Navigator.push(
                     context,
                     AppPageRoute(page: const VoiceSettingsScreen()),
                   ),
                   tooltip: 'Voice settings',
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  padding: EdgeInsets.all(isSmallScreen ? 8 : 10),
+                  constraints: BoxConstraints(
+                    minWidth: isSmallScreen ? 36 : 40,
+                    minHeight: isSmallScreen ? 36 : 40,
+                  ),
                 ),
               ],
             ),
@@ -279,13 +305,24 @@ class _PlansScreenState extends State<PlansScreen> {
                   ? 3 
                   : 2;
           
+          // Better aspect ratio for mobile to prevent overflow
+          final aspectRatio = constraints.maxWidth < 400 
+              ? 0.75 
+              : constraints.maxWidth < 600
+                  ? 0.80
+                  : 0.85;
+          
+          final padding = constraints.maxWidth < 400 
+              ? AppDimens.sm 
+              : AppDimens.md;
+          
           return GridView.builder(
-            padding: const EdgeInsets.all(AppDimens.md),
+            padding: EdgeInsets.all(padding),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              crossAxisSpacing: AppDimens.md,
-              mainAxisSpacing: AppDimens.md,
-              childAspectRatio: 0.85,
+              crossAxisSpacing: padding,
+              mainAxisSpacing: padding,
+              childAspectRatio: aspectRatio,
             ),
             itemCount: provider.plans.length,
             itemBuilder: (context, index) {
@@ -385,6 +422,9 @@ class _PlanGridCardState extends State<_PlanGridCard>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 400;
+    
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),
       onTapUp: (_) => _controller.reverse(),
@@ -409,7 +449,7 @@ class _PlanGridCardState extends State<_PlanGridCard>
               onTap: widget.onTap,
               borderRadius: BorderRadius.circular(AppDimens.radiusLg),
               child: Padding(
-                padding: const EdgeInsets.all(AppDimens.md),
+                padding: EdgeInsets.all(isSmallScreen ? AppDimens.sm : AppDimens.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -417,15 +457,15 @@ class _PlanGridCardState extends State<_PlanGridCard>
                     Row(
                       children: [
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: isSmallScreen ? 36 : 44,
+                          height: isSmallScreen ? 36 : 44,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [AppColors.secondary, AppColors.accent],
                             ),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(isSmallScreen ? 10 : 12),
                             boxShadow: [
                               BoxShadow(
                                 color: AppColors.secondary.withValues(alpha: 0.3),
@@ -434,10 +474,10 @@ class _PlanGridCardState extends State<_PlanGridCard>
                               ),
                             ],
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.directions_bike,
                             color: Colors.white,
-                            size: 22,
+                            size: isSmallScreen ? 18 : 22,
                           ),
                         ),
                         const Spacer(),
@@ -445,7 +485,7 @@ class _PlanGridCardState extends State<_PlanGridCard>
                           icon: Icon(
                             Icons.more_horiz,
                             color: AppColors.textSecondaryLight,
-                            size: 20,
+                            size: isSmallScreen ? 18 : 20,
                           ),
                           padding: EdgeInsets.zero,
                           onSelected: (value) {
@@ -478,13 +518,13 @@ class _PlanGridCardState extends State<_PlanGridCard>
                       ],
                     ),
                     
-                    const SizedBox(height: AppDimens.md),
+                    SizedBox(height: isSmallScreen ? AppDimens.sm : AppDimens.md),
                     
                     // Title
                     Text(
                       widget.plan.name,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 14 : 16,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimaryLight,
                       ),
@@ -510,34 +550,41 @@ class _PlanGridCardState extends State<_PlanGridCard>
                     // Stats row
                     Row(
                       children: [
-                        _buildStat(Icons.schedule, widget.plan.formattedDuration),
-                        const SizedBox(width: AppDimens.md),
-                        _buildStat(Icons.repeat, '${widget.plan.repeatRules.length}'),
+                        _buildStat(Icons.schedule, widget.plan.formattedDuration, isSmallScreen),
+                        SizedBox(width: isSmallScreen ? AppDimens.sm : AppDimens.md),
+                        _buildStat(Icons.repeat, '${widget.plan.repeatRules.length}', isSmallScreen),
                       ],
                     ),
                     
-                    const SizedBox(height: AppDimens.sm),
+                    SizedBox(height: isSmallScreen ? 6 : AppDimens.sm),
                     
                     // Play button
                     SizedBox(
                       width: double.infinity,
-                      height: 40,
+                      height: isSmallScreen ? 36 : 40,
                       child: ElevatedButton(
                         onPressed: widget.onTap,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           elevation: 0,
+                          padding: EdgeInsets.symmetric(horizontal: isSmallScreen ? 8 : 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(AppDimens.radiusMd),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.play_arrow, size: 20),
-                            SizedBox(width: 4),
-                            Text('Start', style: TextStyle(fontWeight: FontWeight.w600)),
+                            Icon(Icons.play_arrow, size: isSmallScreen ? 18 : 20),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Start',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: isSmallScreen ? 13 : 14,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -552,16 +599,16 @@ class _PlanGridCardState extends State<_PlanGridCard>
     );
   }
 
-  Widget _buildStat(IconData icon, String value) {
+  Widget _buildStat(IconData icon, String value, bool isSmallScreen) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: AppColors.textSecondaryLight),
+        Icon(icon, size: isSmallScreen ? 12 : 14, color: AppColors.textSecondaryLight),
         const SizedBox(width: 4),
         Text(
           value,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: isSmallScreen ? 11 : 12,
             color: AppColors.textSecondaryLight,
             fontWeight: FontWeight.w500,
           ),
