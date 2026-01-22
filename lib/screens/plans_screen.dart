@@ -6,6 +6,7 @@ import '../ui/ui.dart';
 import 'plan_editor_screen.dart';
 import 'run_timer_screen.dart';
 import 'voice_settings_screen.dart';
+import 'settings_screen.dart';
 
 /// Screen displaying the list of all timer plans.
 class PlansScreen extends StatefulWidget {
@@ -130,40 +131,15 @@ class _PlansScreenState extends State<PlansScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'RidePulse',
-                            style: TextStyle(
-                              fontSize: isSmallScreen ? 20 : 24,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimaryLight,
-                              letterSpacing: -0.5,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [AppColors.primary, AppColors.secondary],
-                              ),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              'v1.0.0',
-                              style: TextStyle(
-                                fontSize: isSmallScreen ? 9 : 10,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'RidePulse',
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 20 : 24,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimaryLight,
+                          letterSpacing: -0.5,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       if (!isSmallScreen)
                         Text(
@@ -182,50 +158,19 @@ class _PlansScreenState extends State<PlansScreen> {
             ),
           ),
           const Spacer(),
-          // Action buttons with styled containers
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: isSmallScreen ? 2 : AppDimens.xs,
-              vertical: AppDimens.xs,
+          // Settings button
+          IconButton(
+            icon: Icon(Icons.settings_rounded, size: isSmallScreen ? 22 : 24),
+            color: AppColors.primary,
+            onPressed: () => Navigator.push(
+              context,
+              AppPageRoute(page: const SettingsScreen()),
             ),
-            decoration: BoxDecoration(
-              color: AppColors.secondary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.volume_up_rounded, size: isSmallScreen ? 20 : 22),
-                  color: AppColors.secondary,
-                  onPressed: () => context.read<TimerProvider>().testVoice(),
-                  tooltip: 'Test voice',
-                  padding: EdgeInsets.all(isSmallScreen ? 6 : 10),
-                  constraints: BoxConstraints(
-                    minWidth: isSmallScreen ? 32 : 40,
-                    minHeight: isSmallScreen ? 32 : 40,
-                  ),
-                ),
-                Container(
-                  height: 24,
-                  width: 1,
-                  color: AppColors.secondary.withValues(alpha: 0.3),
-                ),
-                IconButton(
-                  icon: Icon(Icons.settings_voice_rounded, size: isSmallScreen ? 20 : 22),
-                  color: AppColors.secondary,
-                  onPressed: () => Navigator.push(
-                    context,
-                    AppPageRoute(page: const VoiceSettingsScreen()),
-                  ),
-                  tooltip: 'Voice settings',
-                  padding: EdgeInsets.all(isSmallScreen ? 6 : 10),
-                  constraints: BoxConstraints(
-                    minWidth: isSmallScreen ? 32 : 40,
-                    minHeight: isSmallScreen ? 32 : 40,
-                  ),
-                ),
-              ],
+            tooltip: 'Settings',
+            padding: EdgeInsets.all(isSmallScreen ? 8 : 10),
+            constraints: BoxConstraints(
+              minWidth: isSmallScreen ? 40 : 44,
+              minHeight: isSmallScreen ? 40 : 44,
             ),
           ),
         ],
