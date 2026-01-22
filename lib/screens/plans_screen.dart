@@ -317,7 +317,12 @@ class _PlansScreenState extends State<PlansScreen> {
               : AppDimens.md;
           
           return GridView.builder(
-            padding: EdgeInsets.all(padding),
+            padding: EdgeInsets.fromLTRB(
+              padding,
+              padding,
+              padding,
+              padding + 80, // Extra bottom padding for FAB
+            ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: padding,
