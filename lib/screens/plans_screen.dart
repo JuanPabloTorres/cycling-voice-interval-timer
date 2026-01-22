@@ -156,7 +156,7 @@ class _PlansScreenState extends State<PlansScreen> {
               ],
             ),
           ),
-          const SizedBox(width: AppDimens.sm),
+          const Spacer(),
           // Action buttons with styled containers
           Container(
             padding: EdgeInsets.symmetric(
@@ -175,10 +175,10 @@ class _PlansScreenState extends State<PlansScreen> {
                   color: AppColors.secondary,
                   onPressed: () => context.read<TimerProvider>().testVoice(),
                   tooltip: 'Test voice',
-                  padding: EdgeInsets.all(isSmallScreen ? 8 : 10),
+                  padding: EdgeInsets.all(isSmallScreen ? 6 : 10),
                   constraints: BoxConstraints(
-                    minWidth: isSmallScreen ? 36 : 40,
-                    minHeight: isSmallScreen ? 36 : 40,
+                    minWidth: isSmallScreen ? 32 : 40,
+                    minHeight: isSmallScreen ? 32 : 40,
                   ),
                 ),
                 Container(
@@ -194,10 +194,10 @@ class _PlansScreenState extends State<PlansScreen> {
                     AppPageRoute(page: const VoiceSettingsScreen()),
                   ),
                   tooltip: 'Voice settings',
-                  padding: EdgeInsets.all(isSmallScreen ? 8 : 10),
+                  padding: EdgeInsets.all(isSmallScreen ? 6 : 10),
                   constraints: BoxConstraints(
-                    minWidth: isSmallScreen ? 36 : 40,
-                    minHeight: isSmallScreen ? 36 : 40,
+                    minWidth: isSmallScreen ? 32 : 40,
+                    minHeight: isSmallScreen ? 32 : 40,
                   ),
                 ),
               ],
