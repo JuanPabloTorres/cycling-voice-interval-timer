@@ -78,14 +78,14 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         title: const Text(
           'Voice Settings',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: AppColors.textPrimaryLight,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -175,7 +175,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: AppColors.textPrimaryLight,
           ),
         ),
       ],
@@ -189,7 +189,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-          border: Border.all(color: AppColors.textDisabled),
+          border: Border.all(color: AppColors.textDisabledLight),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -200,12 +200,12 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         ),
         child: Row(
           children: [
-            Icon(Icons.info_outline, color: AppColors.textSecondary),
+            Icon(Icons.info_outline, color: AppColors.textSecondaryLight),
             const SizedBox(width: AppDimens.md),
             Expanded(
               child: Text(
                 'No English voices found. The default system voice will be used.',
-                style: TextStyle(color: AppColors.textSecondary),
+                style: TextStyle(color: AppColors.textSecondaryLight),
               ),
             ),
           ],
@@ -218,7 +218,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-        border: Border.all(color: AppColors.textDisabled),
+        border: Border.all(color: AppColors.textDisabledLight),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -230,7 +230,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<TtsVoice>(
           value: _selectedVoice,
-          hint: Text('Select voice', style: TextStyle(color: AppColors.textSecondary)),
+          hint: Text('Select voice', style: TextStyle(color: AppColors.textSecondaryLight)),
           isExpanded: true,
           dropdownColor: Colors.white,
           icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
@@ -239,7 +239,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
               value: voice,
               child: Text(
                 voice.displayName,
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: const TextStyle(color: AppColors.textPrimaryLight),
               ),
             );
           }).toList(),
@@ -275,7 +275,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: AppColors.primary,
-            inactiveTrackColor: AppColors.textDisabled,
+            inactiveTrackColor: AppColors.textDisabledLight,
             thumbColor: AppColors.primary,
             overlayColor: AppColors.primary.withValues(alpha: 0.2),
             trackHeight: 6,
@@ -356,7 +356,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
             '• On Windows, install Microsoft voices from Settings → Time & Language → Speech\n'
             '• "Microsoft Helena" or "Microsoft Laura" voices sound more natural',
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: AppColors.textSecondaryLight,
               fontSize: 13,
               height: 1.5,
             ),
