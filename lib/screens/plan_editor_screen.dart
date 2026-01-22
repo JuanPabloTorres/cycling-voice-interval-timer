@@ -49,41 +49,114 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F8FA),
       appBar: AppBar(
-        title: Text(isEditing ? 'Editar Plan' : 'Nuevo Plan'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: AppColors.textPrimaryLight,
+        iconTheme: const IconThemeData(color: AppColors.textPrimaryLight),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, size: 20, color: AppColors.textPrimaryLight),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          isEditing ? 'Edit Plan' : 'New Plan',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimaryLight,
+          ),
+        ),
+        centerTitle: true,
         actions: [
-          TextButton.icon(
-            onPressed: _savePlan,
-            icon: const Icon(Icons.check),
-            label: const Text('Guardar'),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.primary,
+          Padding(
+            padding: const EdgeInsets.only(right: AppDimens.md),
+            child: TextButton.icon(
+              onPressed: _savePlan,
+              icon: const Icon(Icons.check, size: 18, color: Colors.white),
+              label: const Text('Save', style: TextStyle(color: Colors.white)),
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(horizontal: AppDimens.md),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: AppDimens.sm),
         ],
       ),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(AppDimens.md),
+          padding: const EdgeInsets.all(AppDimens.lg),
           children: [
             // Plan info section
-            SectionCard(
-              title: 'Información',
-              icon: Icons.info_outline,
+            Container(
+              padding: const EdgeInsets.all(AppDimens.lg),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(AppDimens.sm),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(AppDimens.radiusSm),
+                        ),
+                        child: Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+                      ),
+                      const SizedBox(width: AppDimens.md),
+                      const Text(
+                        'Plan Information',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimaryLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimens.lg),
                   TextFormField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nombre del plan',
-                      hintText: 'Ej: Entrenamiento de intervalos',
-                      prefixIcon: Icon(Icons.label_outline),
+                    style: const TextStyle(color: AppColors.textPrimaryLight),
+                    decoration: InputDecoration(
+                      labelText: 'Plan name',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryLight),
+                      hintText: 'E.g.: Interval training',
+                      hintStyle: TextStyle(color: AppColors.textSecondaryLight.withValues(alpha: 0.7)),
+                      prefixIcon: const Icon(Icons.label_outline, color: AppColors.textSecondaryLight),
+                      filled: true,
+                      fillColor: const Color(0xFFF5F8FA),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide(color: AppColors.primary, width: 2),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'El nombre es requerido';
+                        return 'Name is required';
                       }
                       return null;
                     },
@@ -91,21 +164,56 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
                   const SizedBox(height: AppDimens.md),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Descripción (opcional)',
-                      hintText: 'Describe tu plan de entrenamiento',
-                      prefixIcon: Icon(Icons.description_outlined),
+                    style: const TextStyle(color: AppColors.textPrimaryLight),
+                    decoration: InputDecoration(
+                      labelText: 'Description (optional)',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryLight),
+                      hintText: 'Describe your training plan',
+                      hintStyle: TextStyle(color: AppColors.textSecondaryLight.withValues(alpha: 0.7)),
+                      prefixIcon: const Icon(Icons.description_outlined, color: AppColors.textSecondaryLight),
+                      filled: true,
+                      fillColor: const Color(0xFFF5F8FA),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide(color: AppColors.primary, width: 2),
+                      ),
                     ),
                     maxLines: 2,
                   ),
                   const SizedBox(height: AppDimens.md),
                   TextFormField(
                     initialValue: _durationMinutes?.toString(),
-                    decoration: const InputDecoration(
-                      labelText: 'Duración total',
-                      hintText: 'Dejar vacío para sin límite',
-                      prefixIcon: Icon(Icons.timer_outlined),
+                    style: const TextStyle(color: AppColors.textPrimaryLight),
+                    decoration: InputDecoration(
+                      labelText: 'Total duration',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryLight),
+                      hintText: 'Leave empty for no limit',
+                      hintStyle: TextStyle(color: AppColors.textSecondaryLight.withValues(alpha: 0.7)),
+                      prefixIcon: const Icon(Icons.timer_outlined, color: AppColors.textSecondaryLight),
                       suffixText: 'min',
+                      suffixStyle: const TextStyle(color: AppColors.textSecondaryLight),
+                      filled: true,
+                      fillColor: const Color(0xFFF5F8FA),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        borderSide: BorderSide(color: AppColors.primary, width: 2),
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -123,14 +231,14 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
             // Events section
             _buildSectionHeader(
               context,
-              title: 'Eventos Exactos',
-              subtitle: 'Avisos en tiempos específicos',
+              title: 'Exact Events',
+              subtitle: 'Alerts at specific times',
               icon: Icons.notifications_active_outlined,
               onAdd: _addEvent,
             ),
             const SizedBox(height: AppDimens.sm),
             if (_events.isEmpty)
-              _buildEmptySection('Sin eventos configurados')
+              _buildEmptySection('No events configured')
             else
               ..._events.asMap().entries.map((entry) => 
                 _buildEventTile(entry.key, entry.value)
@@ -141,14 +249,14 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
             // Repeat rules section
             _buildSectionHeader(
               context,
-              title: 'Intervalos',
-              subtitle: 'Avisos repetidos periódicamente',
+              title: 'Intervals',
+              subtitle: 'Periodically repeated alerts',
               icon: Icons.repeat,
               onAdd: _addRepeatRule,
             ),
             const SizedBox(height: AppDimens.sm),
             if (_repeatRules.isEmpty)
-              _buildEmptySection('Sin intervalos configurados')
+              _buildEmptySection('No intervals configured')
             else
               ..._repeatRules.asMap().entries.map((entry) => 
                 _buildRepeatRuleTile(entry.key, entry.value)
@@ -168,77 +276,113 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
     required IconData icon,
     required VoidCallback onAdd,
   }) {
-    final theme = Theme.of(context);
-    
-    return Row(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: AppColors.secondary.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(AppDimens.radiusSm),
+    return Container(
+      padding: const EdgeInsets.all(AppDimens.md),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
-          child: Icon(icon, color: AppColors.secondary, size: 20),
-        ),
-        const SizedBox(width: AppDimens.md),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.secondary, AppColors.accent],
               ),
-              Text(
-                subtitle,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
+              borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+            ),
+            child: Icon(icon, color: Colors.white, size: 22),
           ),
-        ),
-        IconActionButton(
-          icon: Icons.add,
-          onPressed: onAdd,
-          color: AppColors.primary,
-          tooltip: 'Agregar',
-        ),
-      ],
+          const SizedBox(width: AppDimens.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimaryLight,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondaryLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.add, color: Colors.white, size: 20),
+              onPressed: onAdd,
+              tooltip: 'Add',
+              constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildEmptySection(String text) {
     return Container(
-      padding: const EdgeInsets.all(AppDimens.lg),
+      padding: const EdgeInsets.all(AppDimens.xl),
+      margin: const EdgeInsets.only(top: AppDimens.sm),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.03),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(AppDimens.radiusMd),
         border: Border.all(
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+          color: AppColors.primary.withValues(alpha: 0.2),
           style: BorderStyle.solid,
         ),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
-            fontStyle: FontStyle.italic,
+      child: Column(
+        children: [
+          Icon(
+            Icons.inbox_outlined,
+            size: 40,
+            color: AppColors.textSecondaryLight,
           ),
-        ),
+          const SizedBox(height: AppDimens.sm),
+          Text(
+            text,
+            style: TextStyle(
+              color: AppColors.textSecondaryLight,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildEventTile(int index, TimerEvent event) {
-    final theme = Theme.of(context);
-    
     return Card(
       margin: const EdgeInsets.only(bottom: AppDimens.sm),
+      color: Colors.white,
+      elevation: 1,
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: ListTile(
         leading: Container(
           width: 44,
@@ -264,23 +408,24 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
           event.spokenMessage,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          style: const TextStyle(color: AppColors.textPrimaryLight, fontWeight: FontWeight.w500),
         ),
         subtitle: Text(
-          'A los ${event.formattedTime}',
-          style: theme.textTheme.bodySmall,
+          'At ${event.formattedTime}',
+          style: const TextStyle(color: AppColors.textSecondaryLight, fontSize: 12),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.edit_outlined),
+              icon: const Icon(Icons.edit_outlined, color: AppColors.textSecondaryLight),
               onPressed: () => _editEvent(index),
-              tooltip: 'Editar',
+              tooltip: 'Edit',
             ),
             IconButton(
               icon: Icon(Icons.delete_outline, color: AppColors.error),
               onPressed: () => _deleteEvent(index),
-              tooltip: 'Eliminar',
+              tooltip: 'Delete',
             ),
           ],
         ),
@@ -289,10 +434,11 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
   }
 
   Widget _buildRepeatRuleTile(int index, RepeatRule rule) {
-    final theme = Theme.of(context);
-    
     return Card(
       margin: const EdgeInsets.only(bottom: AppDimens.sm),
+      color: Colors.white,
+      elevation: 1,
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: ListTile(
         leading: Container(
           width: 44,
@@ -313,23 +459,24 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
           rule.spokenMessage,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          style: const TextStyle(color: AppColors.textPrimaryLight, fontWeight: FontWeight.w500),
         ),
         subtitle: Text(
           rule.description,
-          style: theme.textTheme.bodySmall,
+          style: const TextStyle(color: AppColors.textSecondaryLight, fontSize: 12),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.edit_outlined),
+              icon: const Icon(Icons.edit_outlined, color: AppColors.textSecondaryLight),
               onPressed: () => _editRepeatRule(index),
-              tooltip: 'Editar',
+              tooltip: 'Edit',
             ),
             IconButton(
               icon: Icon(Icons.delete_outline, color: AppColors.error),
               onPressed: () => _deleteRepeatRule(index),
-              tooltip: 'Eliminar',
+              tooltip: 'Delete',
             ),
           ],
         ),
@@ -359,7 +506,11 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(index == null ? 'Nuevo Evento' : 'Editar Evento'),
+        backgroundColor: Colors.white,
+        title: Text(
+          index == null ? 'New Event' : 'Edit Event',
+          style: const TextStyle(color: AppColors.textPrimaryLight, fontWeight: FontWeight.w700),
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -369,21 +520,25 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
                   Expanded(
                     child: TextField(
                       controller: minutesController,
+                      style: const TextStyle(color: AppColors.textPrimaryLight),
                       decoration: const InputDecoration(
                         labelText: 'Min',
+                        labelStyle: TextStyle(color: AppColors.textSecondaryLight),
                       ),
                       keyboardType: TextInputType.number,
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppDimens.sm),
-                    child: Text(':', style: TextStyle(fontSize: 24)),
+                    child: Text(':', style: TextStyle(fontSize: 24, color: AppColors.textPrimaryLight)),
                   ),
                   Expanded(
                     child: TextField(
                       controller: secondsController,
+                      style: const TextStyle(color: AppColors.textPrimaryLight),
                       decoration: const InputDecoration(
-                        labelText: 'Seg',
+                        labelText: 'Sec',
+                        labelStyle: TextStyle(color: AppColors.textSecondaryLight),
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -393,9 +548,12 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
               const SizedBox(height: AppDimens.md),
               TextField(
                 controller: messageController,
+                style: const TextStyle(color: AppColors.textPrimaryLight),
                 decoration: const InputDecoration(
-                  labelText: 'Mensaje a decir',
-                  hintText: 'Ej: ¡Aumenta la intensidad!',
+                  labelText: 'Message to speak',
+                  labelStyle: TextStyle(color: AppColors.textSecondaryLight),
+                  hintText: 'E.g.: Increase intensity!',
+                  hintStyle: TextStyle(color: AppColors.textSecondaryLight),
                 ),
                 maxLines: 2,
               ),
@@ -405,7 +563,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textSecondaryLight)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -415,7 +573,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
 
               if (message.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('El mensaje es requerido')),
+                  const SnackBar(content: Text('Message is required')),
                 );
                 return;
               }
@@ -443,7 +601,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
 
               Navigator.pop(context);
             },
-            child: const Text('Guardar'),
+            child: const Text('Save'),
           ),
         ],
       ),
@@ -467,44 +625,61 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(index == null ? 'Nuevo Intervalo' : 'Editar Intervalo'),
+        backgroundColor: Colors.white,
+        title: Text(
+          index == null ? 'New Interval' : 'Edit Interval',
+          style: const TextStyle(color: AppColors.textPrimaryLight, fontWeight: FontWeight.w700),
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: startMinutesController,
+                style: const TextStyle(color: AppColors.textPrimaryLight),
                 decoration: const InputDecoration(
-                  labelText: 'Empezar en minuto',
+                  labelText: 'Start at minute',
+                  labelStyle: TextStyle(color: AppColors.textSecondaryLight),
                   suffixText: 'min',
+                  suffixStyle: TextStyle(color: AppColors.textSecondaryLight),
                 ),
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: AppDimens.md),
               TextField(
                 controller: intervalMinutesController,
+                style: const TextStyle(color: AppColors.textPrimaryLight),
                 decoration: const InputDecoration(
-                  labelText: 'Repetir cada',
+                  labelText: 'Repeat every',
+                  labelStyle: TextStyle(color: AppColors.textSecondaryLight),
                   suffixText: 'min',
+                  suffixStyle: TextStyle(color: AppColors.textSecondaryLight),
                 ),
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: AppDimens.md),
               TextField(
                 controller: endMinutesController,
+                style: const TextStyle(color: AppColors.textPrimaryLight),
                 decoration: const InputDecoration(
-                  labelText: 'Terminar en minuto (opcional)',
-                  hintText: 'Vacío = sin límite',
+                  labelText: 'End at minute (optional)',
+                  labelStyle: TextStyle(color: AppColors.textSecondaryLight),
+                  hintText: 'Empty = no limit',
+                  hintStyle: TextStyle(color: AppColors.textSecondaryLight),
                   suffixText: 'min',
+                  suffixStyle: TextStyle(color: AppColors.textSecondaryLight),
                 ),
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: AppDimens.md),
               TextField(
                 controller: messageController,
+                style: const TextStyle(color: AppColors.textPrimaryLight),
                 decoration: const InputDecoration(
-                  labelText: 'Mensaje a decir',
-                  hintText: 'Ej: Recuerda hidratarte',
+                  labelText: 'Message to speak',
+                  labelStyle: TextStyle(color: AppColors.textSecondaryLight),
+                  hintText: 'E.g.: Remember to hydrate',
+                  hintStyle: TextStyle(color: AppColors.textSecondaryLight),
                 ),
                 maxLines: 2,
               ),
@@ -514,7 +689,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textSecondaryLight)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -525,14 +700,14 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
 
               if (intervalMinutes <= 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('El intervalo debe ser mayor a 0')),
+                  const SnackBar(content: Text('Interval must be greater than 0')),
                 );
                 return;
               }
 
               if (message.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('El mensaje es requerido')),
+                  const SnackBar(content: Text('Message is required')),
                 );
                 return;
               }
@@ -561,7 +736,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
 
               Navigator.pop(context);
             },
-            child: const Text('Guardar'),
+            child: const Text('Save'),
           ),
         ],
       ),
@@ -601,7 +776,7 @@ class _PlanEditorScreenState extends State<PlanEditorScreen> {
     
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(isEditing ? 'Plan actualizado' : 'Plan creado'),
+        content: Text(isEditing ? 'Plan updated' : 'Plan created'),
         backgroundColor: AppColors.success,
       ),
     );

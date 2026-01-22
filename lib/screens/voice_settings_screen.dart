@@ -44,7 +44,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
   }
 
   Future<void> _testVoice() async {
-    await _ttsService.speak('Prueba de voz. ¡Vamos, tú puedes!');
+    await _ttsService.speak('Voice test. Let\'s go, you can do it!');
   }
 
   Future<void> _onVoiceChanged(TtsVoice? voice) async {
@@ -73,29 +73,29 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.backgroundDark,
       appBar: AppBar(
-        title: const Text('Ajustes de Voz'),
+        title: const Text('Voice Settings'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(AppDimens.paddingL),
+              padding: const EdgeInsets.all(AppDimens.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Voice selection
-                  _buildSectionHeader('Voz', Icons.record_voice_over),
-                  const SizedBox(height: AppDimens.paddingM),
+                  _buildSectionHeader('Voice', Icons.record_voice_over),
+                  const SizedBox(height: AppDimens.md),
                   _buildVoiceSelector(),
                   
-                  const SizedBox(height: AppDimens.paddingXL),
+                  const SizedBox(height: AppDimens.xl),
                   
                   // Speech rate
-                  _buildSectionHeader('Velocidad', Icons.speed),
-                  const SizedBox(height: AppDimens.paddingM),
+                  _buildSectionHeader('Speed', Icons.speed),
+                  const SizedBox(height: AppDimens.md),
                   _buildSlider(
                     value: _speechRate,
                     min: 0.25,
@@ -105,11 +105,11 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
                     onChanged: _onSpeechRateChanged,
                   ),
                   
-                  const SizedBox(height: AppDimens.paddingXL),
+                  const SizedBox(height: AppDimens.xl),
                   
                   // Pitch
-                  _buildSectionHeader('Tono', Icons.tune),
-                  const SizedBox(height: AppDimens.paddingM),
+                  _buildSectionHeader('Pitch', Icons.tune),
+                  const SizedBox(height: AppDimens.md),
                   _buildSlider(
                     value: _pitch,
                     min: 0.5,
@@ -119,11 +119,11 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
                     onChanged: _onPitchChanged,
                   ),
                   
-                  const SizedBox(height: AppDimens.paddingXL),
+                  const SizedBox(height: AppDimens.xl),
                   
                   // Volume
-                  _buildSectionHeader('Volumen', Icons.volume_up),
-                  const SizedBox(height: AppDimens.paddingM),
+                  _buildSectionHeader('Volume', Icons.volume_up),
+                  const SizedBox(height: AppDimens.md),
                   _buildSlider(
                     value: _volume,
                     min: 0.0,
@@ -133,12 +133,12 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
                     onChanged: _onVolumeChanged,
                   ),
                   
-                  const SizedBox(height: AppDimens.paddingXL * 2),
+                  const SizedBox(height: AppDimens.xxl),
                   
                   // Test button
                   _buildTestButton(),
                   
-                  const SizedBox(height: AppDimens.paddingL),
+                  const SizedBox(height: AppDimens.lg),
                   
                   // Tips
                   _buildTipsCard(),
@@ -152,20 +152,20 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(AppDimens.paddingS),
+          padding: const EdgeInsets.all(AppDimens.sm),
           decoration: BoxDecoration(
             color: AppColors.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(AppDimens.radiusS),
+            borderRadius: BorderRadius.circular(AppDimens.radiusSm),
           ),
           child: Icon(icon, color: AppColors.primary, size: 20),
         ),
-        const SizedBox(width: AppDimens.paddingM),
+        const SizedBox(width: AppDimens.md),
         Text(
           title,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: AppColors.textPrimaryDark,
           ),
         ),
       ],
@@ -175,20 +175,20 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
   Widget _buildVoiceSelector() {
     if (_voices.isEmpty) {
       return Container(
-        padding: const EdgeInsets.all(AppDimens.paddingL),
+        padding: const EdgeInsets.all(AppDimens.lg),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(AppDimens.radiusM),
-          border: Border.all(color: AppColors.divider),
+          color: AppColors.surfaceDark,
+          borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+          border: Border.all(color: AppColors.textDisabledDark),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.info_outline, color: AppColors.textSecondary),
-            SizedBox(width: AppDimens.paddingM),
+            Icon(Icons.info_outline, color: AppColors.textSecondaryDark),
+            SizedBox(width: AppDimens.md),
             Expanded(
               child: Text(
-                'No se encontraron voces en español. Se usará la voz predeterminada del sistema.',
-                style: TextStyle(color: AppColors.textSecondary),
+                'No English voices found. The default system voice will be used.',
+                style: TextStyle(color: AppColors.textSecondaryDark),
               ),
             ),
           ],
@@ -197,25 +197,25 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingM),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.md),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppDimens.radiusM),
-        border: Border.all(color: AppColors.divider),
+        color: AppColors.surfaceDark,
+        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+        border: Border.all(color: AppColors.textDisabledDark),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<TtsVoice>(
           value: _selectedVoice,
-          hint: const Text('Seleccionar voz'),
+          hint: const Text('Select voice'),
           isExpanded: true,
-          dropdownColor: AppColors.surface,
+          dropdownColor: AppColors.surfaceDark,
           icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
           items: _voices.map((voice) {
             return DropdownMenuItem<TtsVoice>(
               value: voice,
               child: Text(
                 voice.displayName,
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: const TextStyle(color: AppColors.textPrimaryDark),
               ),
             );
           }).toList(),
@@ -251,7 +251,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: AppColors.primary,
-            inactiveTrackColor: AppColors.divider,
+            inactiveTrackColor: AppColors.textDisabledDark,
             thumbColor: AppColors.primary,
             overlayColor: AppColors.primary.withValues(alpha: 0.2),
             trackHeight: 6,
@@ -271,35 +271,43 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
   }
 
   String _getSpeechRateLabel(double rate) {
-    if (rate < 0.35) return 'Muy lenta';
-    if (rate < 0.45) return 'Lenta';
+    if (rate < 0.35) return 'Very slow';
+    if (rate < 0.45) return 'Slow';
     if (rate < 0.55) return 'Normal';
-    if (rate < 0.65) return 'Rápida';
-    return 'Muy rápida';
+    if (rate < 0.65) return 'Fast';
+    return 'Very fast';
   }
 
   String _getPitchLabel(double pitch) {
-    if (pitch < 0.7) return 'Muy grave';
-    if (pitch < 0.9) return 'Grave';
+    if (pitch < 0.7) return 'Very low';
+    if (pitch < 0.9) return 'Low';
     if (pitch < 1.1) return 'Normal';
-    if (pitch < 1.3) return 'Agudo';
-    return 'Muy agudo';
+    if (pitch < 1.3) return 'High';
+    return 'Very high';
   }
 
   Widget _buildTestButton() {
-    return GradientButton(
-      text: 'Probar Voz',
-      icon: Icons.play_arrow,
+    return ElevatedButton.icon(
       onPressed: _testVoice,
+      icon: const Icon(Icons.play_arrow),
+      label: const Text('Test Voice'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: AppDimens.md),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+        ),
+      ),
     );
   }
 
   Widget _buildTipsCard() {
     return Container(
-      padding: const EdgeInsets.all(AppDimens.paddingL),
+      padding: const EdgeInsets.all(AppDimens.lg),
       decoration: BoxDecoration(
         color: AppColors.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppDimens.radiusM),
+        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
       child: Column(
@@ -308,9 +316,9 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
           Row(
             children: [
               Icon(Icons.lightbulb_outline, color: AppColors.primary, size: 20),
-              const SizedBox(width: AppDimens.paddingS),
+              const SizedBox(width: AppDimens.sm),
               const Text(
-                'Consejos',
+                'Tips',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -318,13 +326,13 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: AppDimens.paddingM),
-          const Text(
-            '• Para mayor claridad durante el ciclismo, usa velocidad "Lenta"\n'
-            '• En Windows, instala voces Microsoft desde Configuración → Hora e Idioma → Voz\n'
-            '• Las voces "Microsoft Helena" o "Microsoft Laura" suenan más naturales',
+          const SizedBox(height: AppDimens.md),
+          Text(
+            '• For better clarity while cycling, use "Slow" speed\n'
+            '• On Windows, install Microsoft voices from Settings → Time & Language → Speech\n'
+            '• "Microsoft Helena" or "Microsoft Laura" voices sound more natural',
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: AppColors.textSecondaryDark,
               fontSize: 13,
               height: 1.5,
             ),

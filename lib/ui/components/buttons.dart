@@ -412,3 +412,193 @@ class _TimerControlButtonState extends State<TimerControlButton>
     );
   }
 }
+
+/// Gradient button with cycling-themed orange-yellow gradient.
+/// Perfect for primary CTAs with high visual impact.
+class GradientButton extends StatefulWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final bool isLoading;
+  final double? width;
+  final double height;
+  final List<Color>? gradientColors;
+
+  const GradientButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.icon,
+    this.isLoading = false,
+    this.width,
+    this.height = 52,
+    this.gradientColors,
+  });
+
+  @override
+  State<GradientButton> createState() => _GradientButtonState();
+}
+
+class _GradientButtonState extends State<GradientButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = widget.gradientColors ?? [
+      AppColors.gradientStart,
+      AppColors.gradientEnd,
+    ];
+    
+    final isEnabled = widget.onPressed != null && !widget.isLoading;
+
+    return GestureDetector(
+      onTapDown: isEnabled ? (_) => _controller.forward() : null,
+      onTapUp: isEnabled ? (_) {
+        _controller.reverse();
+        widget.onPressed?.call();
+      } : null,
+      onTapCancel: () => _controller.reverse(),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: Container(
+          width: widget.width ?? double.infinity,
+          height: widget.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: isEnabled 
+                  ? colors 
+                  : colors.map((c) => c.withValues(alpha: 0.5)).toList(),
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(widget.height / 2),
+            boxShadow: isEnabled ? [
+              BoxShadow(
+                color: colors.first.withValues(alpha: 0.4),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ] : null,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: Center(
+              child: widget.isLoading
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (widget.icon != null) ...[
+                          Icon(widget.icon, color: Colors.white, size: 22),
+                          const SizedBox(width: 10),
+                        ],
+                        Text(
+                          widget.text,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Teal/turquoise accent button for secondary actions.
+class TealButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final bool outlined;
+
+  const TealButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.icon,
+    this.outlined = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (outlined) {
+      return OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.secondary,
+          side: const BorderSide(color: AppColors.secondary, width: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 20),
+              const SizedBox(width: 8),
+            ],
+            Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
+    }
+    
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.secondary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 20),
+            const SizedBox(width: 8),
+          ],
+          Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}

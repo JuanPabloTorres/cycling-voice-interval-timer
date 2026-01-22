@@ -201,7 +201,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
           if (provider.formattedRemainingTime != null) ...[
             const SizedBox(height: AppDimens.sm),
             Text(
-              'Restante: ${provider.formattedRemainingTime}',
+              'Remaining: ${provider.formattedRemainingTime}',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white.withValues(alpha: 0.5),
@@ -220,10 +220,10 @@ class _RunTimerScreenState extends State<RunTimerScreen>
 
   Widget _buildStatusBadge(TimerState state) {
     final (text, icon, color, animated) = switch (state) {
-      TimerState.idle => ('Listo para iniciar', Icons.hourglass_empty, Colors.grey, false),
-      TimerState.running => ('En curso', Icons.play_arrow, AppColors.play, true),
-      TimerState.paused => ('Pausado', Icons.pause, AppColors.pause, false),
-      TimerState.completed => ('¡Completado!', Icons.check_circle, AppColors.info, false),
+      TimerState.idle => ('Ready to start', Icons.hourglass_empty, Colors.grey, false),
+      TimerState.running => ('Running', Icons.play_arrow, AppColors.play, true),
+      TimerState.paused => ('Paused', Icons.pause, AppColors.pause, false),
+      TimerState.completed => ('Completed!', Icons.check_circle, AppColors.info, false),
     };
     
     return StatusBadge(
@@ -247,7 +247,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
             ),
             const SizedBox(height: AppDimens.sm),
             Text(
-              'Los mensajes aparecerán aquí',
+              'Messages will appear here',
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.3),
                 fontSize: 14,
@@ -328,7 +328,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
           // Reset button
           TimerControlButton(
             icon: Icons.replay,
-            label: 'Reiniciar',
+            label: 'Reset',
             color: AppColors.reset,
             onPressed: state != TimerState.idle
                 ? () => provider.resetTimer()
@@ -341,7 +341,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
           // Stop button
           TimerControlButton(
             icon: Icons.stop,
-            label: 'Detener',
+            label: 'Stop',
             color: AppColors.stop,
             onPressed: state != TimerState.idle
                 ? () {
@@ -361,25 +361,25 @@ class _RunTimerScreenState extends State<RunTimerScreen>
     final (icon, label, color, onPressed) = switch (state) {
       TimerState.idle => (
           Icons.play_arrow,
-          'Iniciar',
+          'Start',
           AppColors.play,
           () => provider.startTimer(),
         ),
       TimerState.running => (
           Icons.pause,
-          'Pausar',
+          'Pause',
           AppColors.pause,
           () => provider.pauseTimer(),
         ),
       TimerState.paused => (
           Icons.play_arrow,
-          'Continuar',
+          'Resume',
           AppColors.play,
           () => provider.resumeTimer(),
         ),
       TimerState.completed => (
           Icons.replay,
-          'Repetir',
+          'Repeat',
           AppColors.info,
           () {
             provider.resetTimer();

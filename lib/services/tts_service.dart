@@ -19,7 +19,7 @@ class TtsVoice {
 
 /// Service for Text-to-Speech functionality.
 /// 
-/// Provides voice announcements in Spanish for timer events.
+/// Provides voice announcements in English for timer events.
 /// Designed for reliable foreground operation with serialized speech.
 class TtsService {
   FlutterTts? _flutterTts;
@@ -35,7 +35,7 @@ class TtsService {
   double _speechRate = 0.45;  // Slower for better clarity
   double _pitch = 1.0;
 
-  /// Available Spanish voices on this device.
+  /// Available English voices on this device.
   List<TtsVoice> get availableVoices => List.unmodifiable(_availableVoices);
   
   /// Currently selected voice.
@@ -60,8 +60,8 @@ class TtsService {
       // Load available Spanish voices
       await _loadAvailableVoices();
       
-      // Set language to Spanish
-      await _flutterTts!.setLanguage('es-ES');
+      // Set language to English
+      await _flutterTts!.setLanguage('en-US');
       
       // If we have a preferred voice, use it
       if (_selectedVoice != null) {
@@ -109,7 +109,7 @@ class TtsService {
       });
       
       _isInitialized = true;
-      print('[TtsService] Initialized with ${_availableVoices.length} Spanish voices');
+      print('[TtsService] Initialized with ${_availableVoices.length} English voices');
     } catch (e) {
       print('[TtsService] Initialization error: $e');
       _isInitialized = true;
@@ -125,7 +125,7 @@ class TtsService {
         _availableVoices = (voices as List)
             .where((voice) {
               final locale = voice['locale']?.toString().toLowerCase() ?? '';
-              return locale.startsWith('es');
+              return locale.startsWith('en');
             })
             .map((voice) {
               final name = voice['name']?.toString() ?? 'Unknown';
@@ -159,7 +159,7 @@ class TtsService {
         // Sort by display name
         _availableVoices.sort((a, b) => a.displayName.compareTo(b.displayName));
         
-        print('[TtsService] Found ${_availableVoices.length} Spanish voices');
+        print('[TtsService] Found ${_availableVoices.length} English voices');
       }
     } catch (e) {
       print('[TtsService] Error loading voices: $e');
@@ -211,16 +211,16 @@ class TtsService {
     
     // Replace common abbreviations with spoken forms
     processed = processed
-        .replaceAll('min.', 'minutos')
-        .replaceAll('min', 'minutos')
-        .replaceAll('seg.', 'segundos')
-        .replaceAll('seg', 'segundos')
+        .replaceAll('min.', 'minutes')
+        .replaceAll('min', 'minutes')
+        .replaceAll('seg.', 'seconds')
+        .replaceAll('seg', 'seconds')
         .replaceAll('km/h', 'kilómetros por hora')
         .replaceAll('rpm', 'revoluciones por minuto');
     
     // Add commas for natural breathing pauses after time phrases
     processed = processed
-        .replaceAllMapped(RegExp(r'(\d+)\s*(minutos|segundos)'), (m) => '${m[1]} ${m[2]},')
+        .replaceAllMapped(RegExp(r'(\d+)\s*(minutes|seconds)'), (m) => '${m[1]} ${m[2]},')
         .replaceAll(',,', ','); // Clean double commas
     
     // Ensure sentence ends with punctuation for proper pause

@@ -35,6 +35,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -55,6 +56,22 @@ flutter_launcher_icons:
     generate: true
     image_path: "assets/icon/ridepulse3.png"
 
+flutter_native_splash:
+  color: "#1A1A2E"
+  image: assets/icon/ridepulse3.png
+  color_dark: "#0D0D1A"
+  image_dark: assets/icon/ridepulse3.png
+  
+  android_12:
+    color: "#1A1A2E"
+    icon_background_color: "#1A1A2E"
+    image: assets/icon/ridepulse3.png
+    color_dark: "#0D0D1A"
+    icon_background_color_dark: "#0D0D1A"
+    image_dark: assets/icon/ridepulse3.png
+  
+  web: true
+  
 flutter:
   uses-material-design: true
   

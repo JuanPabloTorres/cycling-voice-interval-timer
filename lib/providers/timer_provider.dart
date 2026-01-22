@@ -138,7 +138,7 @@ class TimerProvider extends ChangeNotifier {
       await loadPlans();
       print('[TimerProvider] Deleted plan: $planId');
     } catch (e) {
-      _error = 'Error al eliminar plan: $e';
+      _error = 'Error deleting plan: $e';
       print('[TimerProvider] Delete error: $e');
       notifyListeners();
     }

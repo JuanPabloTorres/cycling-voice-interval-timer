@@ -1,49 +1,63 @@
 import 'package:flutter/material.dart';
 
 /// App color palette optimized for cycling context:
+/// - RidePulse brand colors from logo
 /// - High contrast for outdoor visibility
-/// - Dark-friendly for battery and focus
-/// - Clear action colors
+/// - Blue/green cycling energy
 abstract class AppColors {
-  // Primary palette - energetic green for action
-  static const Color primary = Color(0xFF00C853);
-  static const Color primaryLight = Color(0xFF5EFC82);
-  static const Color primaryDark = Color(0xFF009624);
+  // Primary palette - Blue principal (branding, botones principales)
+  static const Color primary = Color(0xFF0183BF);
+  static const Color primaryLight = Color(0xFF4BA8D4);
+  static const Color primaryDark = Color(0xFF025BA6);
   
-  // Secondary palette - calm blue for info
-  static const Color secondary = Color(0xFF2196F3);
-  static const Color secondaryLight = Color(0xFF6EC6FF);
-  static const Color secondaryDark = Color(0xFF0069C0);
+  // Secondary palette - Verde pulso (acentos, progreso, estado activo)
+  static const Color secondary = Color(0xFF0F8B6E);
+  static const Color secondaryLight = Color(0xFF3AAF91);
+  static const Color secondaryDark = Color(0xFF2E5C22);
+  
+  // Accent - Verde energía (ritmo, intervalos, highlights)
+  static const Color accent = Color(0xFF449C38);
+  static const Color accentLight = Color(0xFF6BBF5E);
   
   // Semantic colors
-  static const Color success = Color(0xFF00C853);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color error = Color(0xFFE53935);
-  static const Color info = Color(0xFF2196F3);
+  static const Color success = Color(0xFF449C38);
+  static const Color warning = Color(0xFFFFB800);
+  static const Color error = Color(0xFFFF5252);
+  static const Color info = Color(0xFF0183BF);
   
-  // Action colors
-  static const Color play = Color(0xFF00C853);
-  static const Color pause = Color(0xFFFF9800);
-  static const Color stop = Color(0xFFE53935);
-  static const Color reset = Color(0xFF78909C);
+  // Action colors - cycling themed
+  static const Color play = Color(0xFF0F8B6E);
+  static const Color pause = Color(0xFFFFB800);
+  static const Color stop = Color(0xFFFF5252);
+  static const Color reset = Color(0xFF90A4AE);
   
-  // Backgrounds
-  static const Color backgroundDark = Color(0xFF121212);
-  static const Color surfaceDark = Color(0xFF1E1E1E);
-  static const Color cardDark = Color(0xFF252525);
+  // Backgrounds - Dark UI with brand colors
+  static const Color backgroundDark = Color(0xFF093F73);
+  static const Color surfaceDark = Color(0xFF0A4A85);
+  static const Color cardDark = Color(0xFF0C5596);
   
-  static const Color backgroundLight = Color(0xFFF5F5F5);
+  static const Color backgroundLight = Color(0xFFF5FAFC);
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color cardLight = Color(0xFFFFFFFF);
   
+  // Gradient colors
+  static const Color gradientStart = Color(0xFF0183BF);
+  static const Color gradientEnd = Color(0xFF0F8B6E);
+  static const Color gradientAccent = Color(0xFF449C38);
+  
   // Text
   static const Color textPrimaryDark = Color(0xFFFFFFFF);
-  static const Color textSecondaryDark = Color(0xFFB0B0B0);
-  static const Color textDisabledDark = Color(0xFF5F5F5F);
+  static const Color textSecondaryDark = Color(0xFFB8D4E8);
+  static const Color textDisabledDark = Color(0xFF5F8AAB);
   
-  static const Color textPrimaryLight = Color(0xFF212121);
-  static const Color textSecondaryLight = Color(0xFF757575);
-  static const Color textDisabledLight = Color(0xFFBDBDBD);
+  static const Color textPrimaryLight = Color(0xFF093F73);
+  static const Color textSecondaryLight = Color(0xFF4A7A9E);
+  static const Color textDisabledLight = Color(0xFFBDD0DE);
+  
+  // Cycling specific
+  static const Color rider = Color(0xFF093F73);
+  static const Color road = Color(0xFF90A4AE);
+  static const Color pulse = Color(0xFF0F8B6E);
 }
 
 /// Standard dimensions for consistent spacing and sizing.
