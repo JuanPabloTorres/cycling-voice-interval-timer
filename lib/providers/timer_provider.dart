@@ -276,12 +276,12 @@ class TimerProvider extends ChangeNotifier {
 
   void _updateNotification() {
     if (_currentPlan != null && 
-        (_timerState == TimerState.running || _timerState == TimerState.paused)) {
+        (timerState == TimerState.running || timerState == TimerState.paused)) {
       _notificationService.showTimerNotification(
         planName: _currentPlan!.name,
         elapsedTime: formattedElapsedTime,
         remainingTime: formattedRemainingTime,
-        isRunning: _timerState == TimerState.running,
+        isRunning: timerState == TimerState.running,
       );
     }
   }
