@@ -78,13 +78,14 @@ class TtsService {
       
       // Platform-specific configuration
       if (!kIsWeb) {
-        // iOS: Enable background audio
+        // iOS: Enable background audio and duck other audio
+        // Removing mixWithOthers will make music pause when TTS speaks
         await _flutterTts!.setIosAudioCategory(
           IosTextToSpeechAudioCategory.playback,
           [
             IosTextToSpeechAudioCategoryOptions.allowBluetooth,
             IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-            IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+            IosTextToSpeechAudioCategoryOptions.duckOthers,  // Duck/pause other audio
             IosTextToSpeechAudioCategoryOptions.defaultToSpeaker,
           ],
           IosTextToSpeechAudioMode.voicePrompt,
@@ -92,6 +93,9 @@ class TtsService {
 
         // Android: Wait for speech completion (serialization)
         await _flutterTts!.awaitSpeakCompletion(true);
+        
+        // Android: Request audio focus to pause music during TTS
+        await _flutterTts!.setSharedInstance(true);
       }
       
       // Set up handlers for speech serialization
