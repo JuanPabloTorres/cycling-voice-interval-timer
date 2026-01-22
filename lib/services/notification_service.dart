@@ -19,42 +19,48 @@ class NotificationService {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/launcher_icon');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: false,
-    );
-    
-    const initSettings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _notifications.initialize(initSettings);
-
-    // Request notification permissions for Android 13+
-    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-    
-    if (androidPlugin != null) {
-      await androidPlugin.requestNotificationsPermission();
+    try {
+      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const iosSettings = DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: false,
+      );
       
-      // Create notification channel for Android
-      const androidChannel = AndroidNotificationChannel(
-        _channelId,
-        _channelName,
-        description: 'Shows timer progress while running',
-        importance: Importance.high,
-        playSound: false,
-        enableVibration: false,
-        showBadge: true,
+      const initSettings = InitializationSettings(
+        android: androidSettings,
+        iOS: iosSettings,
       );
 
-      await androidPlugin.createNotificationChannel(androidChannel);
-    }
+      await _notifications.initialize(initSettings);
 
-    _initialized = true;
+      // Request notification permissions for Android 13+
+      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      
+      if (androidPlugin != null) {
+        await androidPlugin.requestNotificationsPermission();
+        
+        // Create notification channel for Android
+        const androidChannel = AndroidNotificationChannel(
+          _channelId,
+          _channelName,
+          description: 'Shows timer progress while running',
+          importance: Importance.high,
+          playSound: false,
+          enableVibration: false,
+          showBadge: true,
+        );
+
+        await androidPlugin.createNotificationChannel(androidChannel);
+      }
+
+      _initialized = true;
+    } catch (e) {
+      debugPrint('[NotificationService] Initialization error: $e');
+      // Mark as initialized even on error to prevent repeated initialization attempts
+      _initialized = true;
+    }
   }
 
   /// Show or update the timer notification.

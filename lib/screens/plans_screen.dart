@@ -6,7 +6,6 @@ import '../services/services.dart';
 import '../ui/ui.dart';
 import 'plan_editor_screen.dart';
 import 'run_timer_screen.dart';
-import 'voice_settings_screen.dart';
 import 'settings_screen.dart';
 
 /// Screen displaying the list of all timer plans.

@@ -140,7 +140,7 @@ class TtsService {
                   displayName = '${match.group(1)} (Microsoft)';
                 }
               } else if (name.contains('Google')) {
-                displayName = name.replaceAll('Google', '').trim() + ' (Google)';
+                displayName = '${name.replaceAll('Google', '').trim()} (Google)';
               } else {
                 // Shorten long names
                 if (name.length > 30) {
