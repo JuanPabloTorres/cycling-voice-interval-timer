@@ -81,9 +81,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          context.read<TimerProvider>().stopTimer();
-        }
+        // Don't stop timer on back - let it continue in background
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F8FA),
