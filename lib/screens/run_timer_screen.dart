@@ -47,9 +47,16 @@ class _RunTimerScreenState extends State<RunTimerScreen>
       WakelockPlus.enable();
     }
     
-    // Load plan into timer engine
+    // Only load plan if it's different from the current one or timer is idle
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TimerProvider>().loadPlanForExecution(widget.plan);
+      final provider = context.read<TimerProvider>();
+      final isCurrentPlan = provider.currentPlan?.id == widget.plan.id;
+      final isIdle = provider.timerState == TimerState.idle;
+      
+      // Only reset if it's a different plan or no timer is running
+      if (!isCurrentPlan || isIdle) {
+        provider.loadPlanForExecution(widget.plan);
+      }
     });
   }
 
