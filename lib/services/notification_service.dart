@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Service for managing foreground notifications during timer execution.
@@ -32,21 +33,26 @@ class NotificationService {
 
     await _notifications.initialize(initSettings);
 
-    // Create notification channel for Android
-    const androidChannel = AndroidNotificationChannel(
-      _channelId,
-      _channelName,
-      description: 'Shows timer progress while running',
-      importance: Importance.low,
-      playSound: false,
-      enableVibration: false,
-      showBadge: false,
-    );
+    // Request notification permissions for Android 13+
+    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    
+    if (androidPlugin != null) {
+      await androidPlugin.requestNotificationsPermission();
+      
+      // Create notification channel for Android
+      const androidChannel = AndroidNotificationChannel(
+        _channelId,
+        _channelName,
+        description: 'Shows timer progress while running',
+        importance: Importance.high,
+        playSound: false,
+        enableVibration: false,
+        showBadge: true,
+      );
 
-    await _notifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(androidChannel);
+      await androidPlugin.createNotificationChannel(androidChannel);
+    }
 
     _initialized = true;
   }
@@ -70,20 +76,25 @@ class NotificationService {
       _channelId,
       _channelName,
       channelDescription: 'Shows timer progress while running',
-      importance: Importance.low,
-      priority: Priority.low,
+      importance: Importance.high,
+      priority: Priority.high,
       ongoing: true,
       autoCancel: false,
-      showWhen: false,
+      showWhen: true,
+      when: DateTime.now().millisecondsSinceEpoch,
+      usesChronometer: true,
+      chronometerCountDown: false,
       playSound: false,
       enableVibration: false,
       styleInformation: BigTextStyleInformation(contentText),
       icon: '@mipmap/launcher_icon',
+      color: const Color(0xFF00D9FF),
+      colorized: true,
     );
 
     const iosDetails = DarwinNotificationDetails(
-      presentAlert: false,
-      presentBadge: false,
+      presentAlert: true,
+      presentBadge: true,
       presentSound: false,
     );
 
