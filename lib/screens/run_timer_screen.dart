@@ -86,14 +86,24 @@ class _RunTimerScreenState extends State<RunTimerScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: const Color(0xFFF5F8FA),
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.white,
+          backgroundColor: Colors.white,
           elevation: 0,
+          foregroundColor: AppColors.textPrimaryLight,
+          iconTheme: const IconThemeData(color: AppColors.textPrimaryLight),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, size: 20, color: AppColors.textPrimaryLight),
+            onPressed: () => Navigator.pop(context),
+          ),
+          centerTitle: true,
           title: Text(
             widget.plan.name,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+              color: AppColors.textPrimaryLight,
+            ),
           ),
           actions: [
             Consumer<TimerProvider>(
