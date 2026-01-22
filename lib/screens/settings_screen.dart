@@ -75,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
               _buildInfoTile(
                 context,
                 title: 'Version',
-                value: '1.0.0',
+                value: '1.1.1',
                 icon: Icons.tag,
               ),
               const SizedBox(height: AppDimens.sm),

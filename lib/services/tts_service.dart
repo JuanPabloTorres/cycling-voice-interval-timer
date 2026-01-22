@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:audio_session/audio_session.dart';
 
 /// Represents an available TTS voice.
 class TtsVoice {
@@ -23,6 +24,7 @@ class TtsVoice {
 /// Designed for reliable foreground operation with serialized speech.
 class TtsService {
   FlutterTts? _flutterTts;
+  AudioSession? _audioSession;
   bool _isInitialized = false;
   bool _isSpeaking = false;
   
@@ -57,6 +59,25 @@ class TtsService {
     try {
       _flutterTts = FlutterTts();
       
+      // Configure audio session for proper audio focus management
+      if (!kIsWeb) {
+        _audioSession = await AudioSession.instance;
+        await _audioSession!.configure(AudioSessionConfiguration(
+          avAudioSessionCategory: AVAudioSessionCategory.playback,
+          avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.duckOthers,
+          avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+          avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
+          avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+          androidAudioAttributes: const AndroidAudioAttributes(
+            contentType: AndroidAudioContentType.speech,
+            flags: AndroidAudioFlags.none,
+            usage: AndroidAudioUsage.media,
+          ),
+          androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransientMayDuck,
+          androidWillPauseWhenDucked: true,
+        ));
+      }
+      
       // Load available Spanish voices
       await _loadAvailableVoices();
       
@@ -78,24 +99,8 @@ class TtsService {
       
       // Platform-specific configuration
       if (!kIsWeb) {
-        // iOS: Enable background audio and duck other audio
-        // Removing mixWithOthers will make music pause when TTS speaks
-        await _flutterTts!.setIosAudioCategory(
-          IosTextToSpeechAudioCategory.playback,
-          [
-            IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-            IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-            IosTextToSpeechAudioCategoryOptions.duckOthers,  // Duck/pause other audio
-            IosTextToSpeechAudioCategoryOptions.defaultToSpeaker,
-          ],
-          IosTextToSpeechAudioMode.voicePrompt,
-        );
-
         // Android: Wait for speech completion (serialization)
         await _flutterTts!.awaitSpeakCompletion(true);
-        
-        // Android: Request audio focus to pause music during TTS
-        await _flutterTts!.setSharedInstance(true);
       }
       
       // Set up handlers for speech serialization
@@ -103,13 +108,21 @@ class TtsService {
         _isSpeaking = true;
       });
       
-      _flutterTts!.setCompletionHandler(() {
+      _flutterTts!.setCompletionHandler(() async {
         _isSpeaking = false;
+        // Deactivate audio session to release audio focus (resume music)
+        if (!kIsWeb && _audioSession != null) {
+          await _audioSession!.setActive(false);
+        }
       });
       
-      _flutterTts!.setErrorHandler((error) {
+      _flutterTts!.setErrorHandler((error) async {
         _isSpeaking = false;
         print('[TtsService] Error: $error');
+        // Deactivate audio session on error
+        if (!kIsWeb && _audioSession != null) {
+          await _audioSession!.setActive(false);
+        }
       });
       
       _isInitialized = true;
@@ -194,6 +207,11 @@ class TtsService {
     if (_flutterTts == null) return;
 
     try {
+      // Activate audio session to request audio focus (pause music)
+      if (!kIsWeb && _audioSession != null) {
+        await _audioSession!.setActive(true);
+      }
+      
       // Process message for natural pauses
       final processedMessage = _processForFluency(message);
       
@@ -201,6 +219,10 @@ class TtsService {
       print('[TtsService] Speaking: "$processedMessage"');
     } catch (e) {
       print('[TtsService] Speak error: $e');
+      // Deactivate audio session on error
+      if (!kIsWeb && _audioSession != null) {
+        await _audioSession!.setActive(false);
+      }
     }
   }
 
