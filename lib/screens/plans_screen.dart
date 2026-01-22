@@ -335,10 +335,29 @@ class _PlansScreenState extends State<PlansScreen> {
   }
 
   void _navigateToRun(BuildContext context, TimerPlan plan) {
-    Navigator.push(
-      context,
-      AppPageRoute(page: RunTimerScreen(plan: plan)),
-    );
+    final provider = context.read<TimerProvider>();
+    
+    // Check if this plan is already the active one
+    final isActivePlan = provider.currentPlan?.id == plan.id &&
+        provider.timerState != TimerState.idle;
+    
+    if (isActivePlan) {
+      // Just navigate to the running timer without resetting
+      Navigator.push(
+        context,
+        AppPageRoute(page: RunTimerScreen(plan: plan)),
+      );
+    } else {
+      // If there's another timer running, stop it first
+      if (provider.currentPlan != null && provider.timerState != TimerState.idle) {
+        provider.stopTimer();
+      }
+      // Start fresh with the new plan
+      Navigator.push(
+        context,
+        AppPageRoute(page: RunTimerScreen(plan: plan)),
+      );
+    }
   }
 
   void _confirmDelete(BuildContext context, TimerProvider provider, TimerPlan plan) {
