@@ -202,6 +202,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
                 child: TimeDisplay(
                   time: provider.formattedElapsedTime,
                   isLarge: true,
+                  color: AppColors.textPrimaryLight,
                 ),
               );
             },
@@ -212,9 +213,9 @@ class _RunTimerScreenState extends State<RunTimerScreen>
             const SizedBox(height: AppDimens.sm),
             Text(
               'Remaining: ${provider.formattedRemainingTime}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.textSecondaryLight,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -253,13 +254,13 @@ class _RunTimerScreenState extends State<RunTimerScreen>
             Icon(
               Icons.chat_bubble_outline,
               size: 40,
-              color: Colors.white.withValues(alpha: 0.2),
+              color: Colors.grey.withValues(alpha: 0.4),
             ),
             const SizedBox(height: AppDimens.sm),
             Text(
               'Messages will appear here',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.3),
+                color: Colors.grey.withValues(alpha: 0.6),
                 fontSize: 14,
               ),
             ),
@@ -282,11 +283,11 @@ class _RunTimerScreenState extends State<RunTimerScreen>
           decoration: BoxDecoration(
             color: isFirst 
                 ? AppColors.play.withValues(alpha: 0.15)
-                : Colors.white.withValues(alpha: 0.05),
+                : Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(AppDimens.radiusMd),
             border: isFirst 
                 ? Border.all(color: AppColors.play.withValues(alpha: 0.4))
-                : null,
+                : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
           ),
           child: Row(
             children: [
@@ -296,13 +297,13 @@ class _RunTimerScreenState extends State<RunTimerScreen>
                   vertical: AppDimens.xs,
                 ),
                 decoration: BoxDecoration(
-                  color: isFirst ? AppColors.play : Colors.white.withValues(alpha: 0.1),
+                  color: isFirst ? AppColors.play : Colors.grey.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(AppDimens.radiusSm),
                 ),
                 child: Text(
                   _formatSecond(message.second),
                   style: TextStyle(
-                    color: isFirst ? Colors.white : Colors.white.withValues(alpha: 0.6),
+                    color: isFirst ? Colors.white : AppColors.textSecondaryLight,
                     fontSize: 12,
                     fontFamily: 'monospace',
                     fontWeight: FontWeight.w600,
@@ -314,7 +315,7 @@ class _RunTimerScreenState extends State<RunTimerScreen>
                 child: Text(
                   message.message,
                   style: TextStyle(
-                    color: isFirst ? Colors.white : Colors.white.withValues(alpha: 0.6),
+                    color: isFirst ? AppColors.textPrimaryLight : AppColors.textSecondaryLight,
                     fontSize: isFirst ? 16 : 14,
                     fontWeight: isFirst ? FontWeight.w500 : FontWeight.normal,
                   ),
