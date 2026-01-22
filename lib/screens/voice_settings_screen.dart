@@ -73,11 +73,21 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: const Color(0xFFF0F8FC),
       appBar: AppBar(
-        title: const Text('Voice Settings'),
+        title: const Text(
+          'Voice Settings',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -154,7 +164,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         Container(
           padding: const EdgeInsets.all(AppDimens.sm),
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(AppDimens.radiusSm),
           ),
           child: Icon(icon, color: AppColors.primary, size: 20),
@@ -165,7 +175,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.textPrimary,
           ),
         ),
       ],
@@ -177,18 +187,25 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
       return Container(
         padding: const EdgeInsets.all(AppDimens.lg),
         decoration: BoxDecoration(
-          color: AppColors.surfaceDark,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-          border: Border.all(color: AppColors.textDisabledDark),
+          border: Border.all(color: AppColors.textDisabled),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
-            Icon(Icons.info_outline, color: AppColors.textSecondaryDark),
-            SizedBox(width: AppDimens.md),
+            Icon(Icons.info_outline, color: AppColors.textSecondary),
+            const SizedBox(width: AppDimens.md),
             Expanded(
               child: Text(
                 'No English voices found. The default system voice will be used.',
-                style: TextStyle(color: AppColors.textSecondaryDark),
+                style: TextStyle(color: AppColors.textSecondary),
               ),
             ),
           ],
@@ -199,23 +216,30 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppDimens.md),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-        border: Border.all(color: AppColors.textDisabledDark),
+        border: Border.all(color: AppColors.textDisabled),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<TtsVoice>(
           value: _selectedVoice,
-          hint: const Text('Select voice'),
+          hint: Text('Select voice', style: TextStyle(color: AppColors.textSecondary)),
           isExpanded: true,
-          dropdownColor: AppColors.surfaceDark,
+          dropdownColor: Colors.white,
           icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
           items: _voices.map((voice) {
             return DropdownMenuItem<TtsVoice>(
               value: voice,
               child: Text(
                 voice.displayName,
-                style: const TextStyle(color: AppColors.textPrimaryDark),
+                style: const TextStyle(color: AppColors.textPrimary),
               ),
             );
           }).toList(),
@@ -251,7 +275,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: AppColors.primary,
-            inactiveTrackColor: AppColors.textDisabledDark,
+            inactiveTrackColor: AppColors.textDisabled,
             thumbColor: AppColors.primary,
             overlayColor: AppColors.primary.withValues(alpha: 0.2),
             trackHeight: 6,
@@ -332,7 +356,7 @@ class _VoiceSettingsScreenState extends State<VoiceSettingsScreen> {
             '• On Windows, install Microsoft voices from Settings → Time & Language → Speech\n'
             '• "Microsoft Helena" or "Microsoft Laura" voices sound more natural',
             style: TextStyle(
-              color: AppColors.textSecondaryDark,
+              color: AppColors.textSecondary,
               fontSize: 13,
               height: 1.5,
             ),
